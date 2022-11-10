@@ -20,7 +20,7 @@ mariadb() {
     docker cp ./config/libpam_oidc.yaml database:/etc/datajoint/
     docker exec -it database mysql -uroot -p${ROOT_PASSWORD} -e "CREATE USER '${DJ_AUTH_USER}'@'%' IDENTIFIED VIA pam USING 'oidc';"
     docker exec -it database mysql -h 127.0.0.1 -u${DJ_AUTH_USER} -p${DJ_AUTH_PASSWORD} -e "SELECT 'delegated to oidc' as login;"
-    docker exec -it database mysql -h 127.0.0.1 -u${DJ_AUTH_USER} -p${DJ_AUTH_PASSWORD} -e "SELECT 'delegated to oidc' as login;"
+    docker exec -it database mysql -h 127.0.0.1 -u${DJ_AUTH_USER} -p${DJ_AUTH_TOKEN} -e "SELECT 'delegated to oidc' as login;"
     docker exec -it database mysql -h 127.0.0.1 -u${DJ_AUTH_USER} -pdeny -e "SELECT 'delegated to oidc' as login;"
 }
 
@@ -40,7 +40,8 @@ percona() {
     docker cp ./config/libpam_oidc.yaml database:/etc/datajoint/
     docker exec -it database mysql -uroot -p${ROOT_PASSWORD} -e "CREATE USER '${DJ_AUTH_USER}'@'%' IDENTIFIED WITH auth_pam AS 'oidc';"
     docker exec -it database mysql -h 127.0.0.1 -u${DJ_AUTH_USER} -p${DJ_AUTH_PASSWORD} -e "SELECT 'delegated to oidc' as login;"
-    docker exec -it database mysql -h 127.0.0.1 -u${DJ_AUTH_USER} -p${DJ_AUTH_PASSWORD} -e "SELECT 'delegated to oidc' as login;"
+    docker exec -it database mysql -h 127.0.0.1 -u${DJ_AUTH_USER} -p${DJ_AUTH_TOKEN} -e "SELECT 'delegated to oidc' as login;"
     docker exec -it database mysql -h 127.0.0.1 -u${DJ_AUTH_USER} -pdeny -e "SELECT 'delegated to oidc' as login;"
 }
 
+"$@"
